@@ -1,0 +1,6 @@
+{
+    "jscodehints.detectedExclusions": [
+        "C:/AngularUIServerExpress/public/lib/jquery/src/data/Data.js",
+        "C:/AngularUIServerExpress/public/lib/fullcalendar/gcal.js"
+    ]
+}
