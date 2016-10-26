@@ -1,8 +1,11 @@
 var express = require("express");
 
 var Teams = require('../models/teams');
+var Leagues = require('../models/leagues');
 
 var jwt = require('express-jwt');
+
+var async = require('async') ;
 
 var auth = jwt({
   secret: 'MY_SECRET',
@@ -12,12 +15,17 @@ var auth = jwt({
 var api = express.Router();
 
 api.get('/leagues/:id/teams', function(req, res){ 
-    Teams.find({ leagueId: req.params.id }, function(err, teams, next) {
-        if (err) return next(err);
-        res.json(teams);
-    });
+	console.log('req.params.id : ' + req.params.id);
+    Leagues.findById( req.params.id )
+		   .populate('teams')
+		   .exec(function(err, league, next) {
+				console.log('league : ' + league);
+        		if (err) return next(err);
+        		res.json(league.teams);
+    		});
 });
 
+/*
 api.post('/teams', function(req, res){
     var teams = new Teams();
     teams.name = req.body.name;
@@ -28,6 +36,47 @@ api.post('/teams', function(req, res){
         if (err) return next(err);
         res.json(result);
     });
+}); 
+*/
+
+api.post('/teams', function(req, res){
+	
+	function saveTeams(cb) {
+		var teams = new Teams();
+		teams.name = req.body.name;
+		teams.coach = req.body.coach;
+		teams.divisionName = req.body.divisionName;
+		teams.save(function(err, team){
+			if (err) { console.log('ERROR SAVE TEAMS : ' + err); }
+			cb(null, team);
+		});
+
+	}
+	
+	function updateLeagues(team, cb) {
+		console.log('req.body.leagueId : ' + req.body.leagueId);
+		Leagues.findOne({ _id: req.body.leagueId }, function(err, league) {
+			if(err) { console.log('ERROR : ' + err); }
+			console.log(' League : ' + JSON.stringify(league));			
+			league.teams.push(team._id);
+			league.save(function(err, league){
+				if (err) console.log(err);
+    		});
+			console.log(' League : ' + JSON.stringify(league));
+			cb(null, team);
+		});
+	}
+
+	
+	function finalCallback(err, team) {
+		if (err) { return console.error(err); }
+		return res.json(team);
+	}
+	
+	var steps = [saveTeams, updateLeagues];
+
+	async.waterfall(steps, finalCallback);
+	
 }); 
 
 api.patch('/teams/:id', function(req, res){ 

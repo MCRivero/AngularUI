@@ -1,11 +1,10 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var DatateamsSchema = new Schema({
+var DatateamspopulateSchema = new Schema({
     name: String,
     coach: String,
-    divisionName: String,
-    leagueId: String
-});
+    divisionName: String
+},{collection: 'datateamspopulate'});
 
-module.exports = mongoose.model('Datateams', DatateamsSchema);
+module.exports = mongoose.model('Datateamspopulate', DatateamspopulateSchema);
