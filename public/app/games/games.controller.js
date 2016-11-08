@@ -16,6 +16,7 @@
         vm.deleteItem = deleteItem;
         vm.editItem = editItem;
         vm.games = initialData.games;
+		vm.leagueId = $stateParams.leagueId;
         vm.locations = initialData.locations;
         vm.locationsLookup = {};
         vm.teams = initialData.teams;
@@ -81,7 +82,7 @@
 			};
 		}
 
-		function deleteItem(id){
+		function deleteItem(id, leagueId){
 			if (!authentication.isLoggedIn()){		
 				dialogs.confirm('To delete a game you should be logged in', 'Warning to the user !!!', ['OK', 'Cancel'])
 					.then(function(){
@@ -96,7 +97,7 @@
 
 			dialogs.confirm('Are you sure you want to Delete this item?', 'Delete?', ['OK', 'Cancel'])
 				.then(function(){
-					eliteApi.deleteGame(id, headers).then(function(data){
+					eliteApi.deleteGame(id, $stateParams.leagueId, headers).then(function(data){
 						_.remove(vm.games, { '_id': id });
 					});
 				});

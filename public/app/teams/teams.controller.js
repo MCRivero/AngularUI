@@ -17,7 +17,7 @@
         vm.teams = initialData;
         vm.toggleExpand = toggleExpand;
         vm.accordionExpanded = true;
-		
+		vm.leagueId = $stateParams.leagueId;
 
         activate();
 
@@ -28,7 +28,7 @@
             
         }
       
-        function deleteItem(id) {
+        function deleteItem(id, leagueId) {
 			if (!authentication.isLoggedIn()){		
 				dialogs.confirm('To delete a team you should be logged in', 'Warning to the user !!!', ['OK', 'Cancel'])
 					.then(function(){
@@ -43,7 +43,7 @@
 			
             dialogs.confirm('Are you sure you want to Delete this item?', 'Delete?', ['OK', 'Cancel'])
                 .then(function(){
-                    eliteApi.deleteTeam(id, headers).then(function(data){
+                    eliteApi.deleteTeam(id, $stateParams.leagueId, headers).then(function(data){
                         _.remove(vm.teams, { '_id': id });
                         initializeGroups();
                     });

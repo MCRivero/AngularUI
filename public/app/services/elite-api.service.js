@@ -44,8 +44,8 @@
             return httpPost('/leagues', league, headers);
         }
 
-        function deleteGame(id, headers){
-            return httpDelete('/games/' + id, headers);
+        function deleteGame(id, leagueId, headers){
+            return httpDelete('/games/' + id + '/' + leagueId, headers);
         }
 
         function deleteLeague(id, headers){
@@ -56,14 +56,14 @@
             return httpDelete('/locations/' + id);
         }
 
-        function deleteTeam(id, headers){
-            return httpDelete('/teams/' + id, headers);
+        function deleteTeam(id, leagueId, headers){
+            return httpDelete('/teams/' + id + '/' + leagueId, headers);
         }
 
         function getGames(leagueId){
             //var url = getUrlByLeagueId('/games', leagueId);
             var url = '/games/' + leagueId;
-                return httpGet(url);
+            return httpGet(url);
         }
 
         function getLeague(leagueId){

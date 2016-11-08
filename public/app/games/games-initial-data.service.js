@@ -22,6 +22,7 @@
                 eliteApi.getGames(leagueId),
                 eliteApi.getLocations()
             ]).then(function(results){
+				console.log(' *** games : ' + JSON.stringify(results[1]));
                 return {
                     teams: results[0],
                     games: results[1],

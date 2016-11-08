@@ -99,7 +99,7 @@
             })
             /* Multiples vistas con nombre
             .state('league.teams', {
-		url: '/teams',
+				url: '/teams',
                 views: {
                     'tabContent': {
                         templateUrl: 'app/teams/teams.html',
